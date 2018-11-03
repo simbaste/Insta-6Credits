@@ -1,5 +1,5 @@
 import React from 'react';
-import Inputs from './input.js'
+import Inputs from './Inputs'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 
 const App = () => {
