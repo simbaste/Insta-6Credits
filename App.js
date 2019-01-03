@@ -1,7 +1,11 @@
 import React from 'react';
 import Inputs from './components/Inputs'
+import HomeScreen from './components/HomeScreen'
+import SettingsScreen from './components/SettingsScreen'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, SafeAreaView } from 'react-native';
 import LoopAnimation from 'react-native-LoopAnimation'
+
+import * as ReactNavigation from 'react-navigation'
 
 const App = () => {
   const imgSource = {
@@ -10,6 +14,13 @@ const App = () => {
     height: 306
   }
   return (
+
+    // <View>
+    //     <MyApp />
+    // </View>
+    
+    // this create the login screen
+
     <View>
       <SafeAreaView>
         <LoopAnimation 
@@ -22,6 +33,15 @@ const App = () => {
   )
 }
 export default App
+
+const MyApp = ReactNavigation.createDrawerNavigator({
+  Home: {
+    screen: HomeScreen
+  },
+  Settings: {
+    screen: SettingsScreen
+  }
+})
 
 const styles = StyleSheet.create({
   container: {

@@ -11,8 +11,10 @@
   "dependencies": {
     "expo": "^30.0.1",
     "firebase": "^5.5.8",
+    "native-base": "^2.10.0",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
-    "react-native-LoopAnimation": "^0.1.0"
+    "react-native-LoopAnimation": "^0.1.0",
+    "react-navigation": "^3.0.9"
   }
 }
