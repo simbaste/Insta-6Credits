@@ -13,23 +13,16 @@ var config = {
   };
 
 function password_validate(password) {
-    var mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
-    var re = {
-        'capital' : /[A-Z]/,
-        'digit'   : /[0-9]/,
-        'full'    : /[A-Za-z0-9]{7,13}$/
-    };
-    // return re.capital.test(password) && 
-    //        re.digit.test(password) && 
-    //        re.full.test(password);
-    return mediumRegex.test(password);
+    var mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{7,13})");
+
+    return mediumRegex.test(password)
 }
 
 function email_validate(email) {
     console.log(email);
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
     if (reg.test(email) === false) {
-        // console.log("Email is Not Correct");
+        console.log("Email is Not Correct");
         // alert('Email is Not Correct');
         return false;
     }
@@ -39,25 +32,61 @@ function email_validate(email) {
     }
 }
 
+function createUser(email, password) {
+    try {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+    } catch(error) {
+        console.log(error.toString())
+    }
+}
+
+function loginUser(email, password) {
+    try {
+        firebase.auth().signInWithEmailAndPassword(email, password).then( (user) => {
+            // console.log(`User ==> ${user}`);
+            console.log(user);                     
+        })
+    } catch (error) {
+        console.log(error.toString());
+    }
+}
+
 class Inputs extends Component {
     state = {
         email: '',
-        pwd: ''
+        password: ''
     }
     handleEmail = (text) => {
+        console.log(`email ==>> ${text}`);
+        
         this.setState({email:text});
     }
 
     handlePwd = (text) => {
-        this.setState({ pwd: text });
+        console.log(`password ==>> ${text}`);
+        this.setState({ password: text });
     }
-    login = (email, pass) => {
+    signin = (email, pass) => {
+
+        console.log(`Sign In with email = ${email} and password = ${pass}`);
+        
         if (!email_validate(email)) {
             alert('Email is Not Correct');
         } else if (!password_validate(pass)) {
             alert('password most contain a capital letter, digit and has between 7 and 13 characters');
         } else {
             alert('email: ' + email + ' password: ' + pass)
+            loginUser(email, pass)
+        }
+    }
+    signup = (email, pass) => {
+        if (!email_validate(email)) {
+            alert('Email is Not Correct');
+        } else if (!password_validate(pass)) {
+            alert('password most contain a capital letter, digit and has between 7 and 13 characters');
+        } else {
+            alert('email: ' + email + ' password: ' + pass)
+            createUser(email, pass)
         }
     }
     render() {
@@ -78,17 +107,25 @@ class Inputs extends Component {
                 underlineColorAndroid = "transparent"
                 placeholder = "Password"
                 placeholderTextColor = '#ffffff'
+                secureTextEntry={true}
                 // placeholderTextColor = "#9a73ef"
 
                 autoCapitalize = "none"
-                onChangeText = {this.handlePassword}/>
+                onChangeText = {this.handlePwd}/>
                 
                 <TouchableOpacity
-                style = {styles.submitButton}
+                style = {styles.signInButton}
                 onPress = {
-                    () => this.login(this.state.email, this.state.password)
+                    () => this.signin(this.state.email, this.state.password)
                 }>
-                <Text style = {styles.submitButtonText}> Submit </Text>
+                <Text style = {styles.submitButtonText}> Sign In </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                style = {styles.signUpButton}
+                onPress = {
+                    () => this.signup(this.state.email, this.state.password)
+                }>
+                <Text style = {styles.submitButtonText}> Sign Up </Text>
                 </TouchableOpacity>
             </View>
         )
@@ -108,14 +145,23 @@ const styles = StyleSheet.create({
        borderColor: '#7a42f4',
        borderWidth: 1
     },
-    submitButton: {
-       backgroundColor: '#7a42f4',
+    signInButton: {
+       backgroundColor: '#00b300',
        justifyContent: 'center',
        alignItems: 'center',
        borderRadius: 25,
        margin: 15,
        height: 40,
     },
+    signUpButton: {
+        backgroundColor: '#7a42f4',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 25,
+        marginLeft: 15,
+        marginRight: 15,
+        height: 40,
+     },
     submitButtonText:{
        color: 'white'
     }
