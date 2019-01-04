@@ -1,6 +1,24 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+import { 
+    View, 
+    Text,
+    ActivityIndicator,
+    AsyncStorage,
+    Button,
+    StatusBar, 
+    TouchableOpacity, 
+    TextInput, 
+    StyleSheet } from 'react-native'
+
 import * as firebase from 'firebase'
+
+import { 
+    createStackNavigator, 
+    createSwitchNavigator, 
+    createAppContainer } from 'react-navigation'
+import SettingsScreen from './SettingsScreen';
+import HomeScreen from './HomeScreen';
+import LoopAnimation from 'react-native-LoopAnimation';
 
 // Initialize Firebase
 var config = {
@@ -32,30 +50,38 @@ function email_validate(email) {
     }
 }
 
-function createUser(email, password) {
-    try {
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-    } catch(error) {
-        console.log(error.toString())
-    }
-}
-
-function loginUser(email, password) {
-    try {
-        firebase.auth().signInWithEmailAndPassword(email, password).then( (user) => {
-            // console.log(`User ==> ${user}`);
-            console.log(user);                     
-        })
-    } catch (error) {
-        console.log(error.toString());
-    }
-}
-
 class Inputs extends Component {
+
+    static navigationOptions = {
+        title: 'Please sign in',
+      };    
+
     state = {
         email: '',
         password: ''
     }
+
+    createUser = (email, password) => {
+        try {
+            firebase.auth().createUserWithEmailAndPassword(email, password).then( (user) => {
+                
+            })
+        } catch(error) {
+            console.log(error.toString())
+        }
+    }
+
+    loginUser = (email, password) => {
+        try {
+            firebase.auth().signInWithEmailAndPassword(email, password).then( (user) => {
+                // console.log(`User ==> ${user}`);
+                console.log(user);                     
+            })
+        } catch (error) {
+            console.log(error.toString());
+        }
+    }
+
     handleEmail = (text) => {
         console.log(`email ==>> ${text}`);
         
@@ -76,7 +102,8 @@ class Inputs extends Component {
             alert('password most contain a capital letter, digit and has between 7 and 13 characters');
         } else {
             alert('email: ' + email + ' password: ' + pass)
-            loginUser(email, pass)
+            this.loginUser(email, pass)
+            this._signInAsync()
         }
     }
     signup = (email, pass) => {
@@ -86,15 +113,25 @@ class Inputs extends Component {
             alert('password most contain a capital letter, digit and has between 7 and 13 characters');
         } else {
             alert('email: ' + email + ' password: ' + pass)
-            createUser(email, pass)
+            this.createUser(email, pass)
         }
     }
     render() {
+
+        const imgSource = {
+            uri: 'http://www.menucool.com/slider/jsImgSlider/images/image-slider-2.jpg',
+            width: 700,
+            height: 306
+          }
         if (!firebase.apps.length) {
             firebase.initializeApp(config)
         }
         return (
             <View style = {styles.container}>
+                <LoopAnimation 
+                    source={imgSource}
+                    duration={10000}
+                />
                 <TextInput style = {styles.input}
                 underlineColorAndroid = "transparent"
                 placeholder = "Email"
@@ -129,13 +166,24 @@ class Inputs extends Component {
                 </TouchableOpacity>
             </View>
         )
-    }
+    };
+
+    _signInAsync = async () => {
+        await AsyncStorage.setItem('userToken', 'abc');
+        this.props.navigation.navigate('App');
+      };
 }
+
 export default Inputs
 
 const styles = StyleSheet.create({
     container: {
        paddingTop: 23
+    },
+    uuthLoadingScreen: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     input: {
        margin: 10,
@@ -165,4 +213,4 @@ const styles = StyleSheet.create({
     submitButtonText:{
        color: 'white'
     }
- })
+ });

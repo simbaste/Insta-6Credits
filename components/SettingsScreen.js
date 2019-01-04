@@ -1,20 +1,38 @@
 import React, {Component} from 'react';
 import { 
-    StyleSheet,
+    View, 
     Text,
-    View,
-    TouchableOpacity,
-    TextInput,
-    SafeAreaView } from 'react-native';
+    ActivityIndicator,
+    AsyncStorage,
+    Button,
+    StatusBar, 
+    TouchableOpacity, 
+    TextInput, 
+    StyleSheet } from 'react-native';
+
+import { 
+    createStackNavigator, 
+    createSwitchNavigator, 
+    createAppContainer } from 'react-navigation';
 
 class SettingsScreen extends Component {
-    render() {
+    static navigationOptions = {
+        title: 'Lots of features here',
+      };
+    
+      render() {
         return (
-            <View>
-
-            </View>
-        )
-    }
+          <View style={styles.container}>
+            <Button title="I'm done, sign me out" onPress={this._signOutAsync} />
+            <StatusBar barStyle="default" />
+          </View>
+        );
+      }
+    
+      _signOutAsync = async () => {
+        await AsyncStorage.clear();
+        this.props.navigation.navigate('Auth');
+      };
 }
 
 export default SettingsScreen

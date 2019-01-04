@@ -2,38 +2,19 @@ import React from 'react';
 import Inputs from './components/Inputs'
 import HomeScreen from './components/HomeScreen'
 import SettingsScreen from './components/SettingsScreen'
+import AuthLoadingScreen from './components/AuthLoadingScreen'
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, SafeAreaView } from 'react-native';
 import LoopAnimation from 'react-native-LoopAnimation'
 
 import * as ReactNavigation from 'react-navigation'
 
-const App = () => {
-  const imgSource = {
-    uri: 'http://www.menucool.com/slider/jsImgSlider/images/image-slider-2.jpg',
-    width: 700,
-    height: 306
-  }
-  return (
+import { 
+  createStackNavigator, 
+  createSwitchNavigator, 
+  createAppContainer } from 'react-navigation';
 
-    // <View>
-    //     <MyApp />
-    // </View>
-    
-    // this create the login screen
-
-    <View>
-      <SafeAreaView>
-        <LoopAnimation 
-          source={imgSource}
-          duration={10000}
-        />
-        <Inputs style={styles.loginView}/>
-      </SafeAreaView>
-    </View>
-  )
-}
-export default App
-
+const AppStack = createStackNavigator({ Home: HomeScreen, Other: SettingsScreen });
+const AuthStack = createStackNavigator({ SignIn: Inputs });
 const MyApp = ReactNavigation.createDrawerNavigator({
   Home: {
     screen: HomeScreen
@@ -42,6 +23,17 @@ const MyApp = ReactNavigation.createDrawerNavigator({
     screen: SettingsScreen
   }
 })
+
+export default createAppContainer(createSwitchNavigator(
+  {
+    AuthLoading: AuthLoadingScreen,
+    App: MyApp,
+    Auth: AuthStack,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  }
+));
 
 const styles = StyleSheet.create({
   container: {
