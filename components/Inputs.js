@@ -19,6 +19,7 @@ import {
 import SettingsScreen from './SettingsScreen';
 import HomeScreen from './HomeScreen';
 import LoopAnimation from 'react-native-LoopAnimation';
+// import * as constants from '../constants';
 
 // Initialize Firebase
 var config = {
@@ -102,7 +103,7 @@ class Inputs extends Component {
         } else if (!password_validate(pass)) {
             alert('password most contain a capital letter, digit and has between 7 and 13 characters');
         } else {
-            alert('email: ' + email + ' password: ' + pass)
+            alert('You are WELCOME to the Insta6Credits App')
             this.loginUser(email, pass)
             this._signInAsync()
         }
@@ -113,7 +114,7 @@ class Inputs extends Component {
         } else if (!password_validate(pass)) {
             alert('password most contain a capital letter, digit and has between 7 and 13 characters');
         } else {
-            alert('email: ' + email + ' password: ' + pass)
+            alert('You succesful SignUp on Insta6Credits App')
             this.createUser(email, pass)
         }
     }
