@@ -54,6 +54,7 @@ class Inputs extends Component {
 
     static navigationOptions = {
         title: 'Please sign in',
+        headerStyle: { backgroundColor: '#7a42f4' }
       };    
 
     state = {

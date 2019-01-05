@@ -6,6 +6,7 @@ import {
     AsyncStorage,
     Button,
     StatusBar, 
+    Image,
     TouchableOpacity, 
     TextInput, 
     StyleSheet } from 'react-native';
@@ -15,17 +16,37 @@ import {
     createSwitchNavigator, 
     createAppContainer } from 'react-navigation';
 
+import { Icon, Container, Header, Content, Left } from 'native-base';
+
 class SettingsScreen extends Component {
     static navigationOptions = {
-        title: 'Lots of features here',
+        drawerLabel: 'Settings',
+        drawerIcon: ({ tintColor }) => (
+        <Image
+            source={require('../assets/settings.png')}
+            style={[styles.icon, {tintColor: tintColor}]}
+        />
+        )
       };
     
       render() {
         return (
-          <View style={styles.container}>
-            <Button title="I'm done, sign me out" onPress={this._signOutAsync} />
-            <StatusBar barStyle="default" />
-          </View>
+            <Container>
+                <Header style={{ backgroundColor: '#7a42f4' }}>
+                    <Left>
+                        <Icon name="ios-menu" onPress={() =>
+                        this.props.navigation.openDrawer()} />
+                    </Left>
+                </Header>
+                <Content contentContainerStyle={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }} >
+                    <Button title="I'm done, sign me out" onPress={this._signOutAsync} />
+                    <StatusBar barStyle="default" />
+                </Content>
+            </Container>
         );
       }
     
@@ -46,5 +67,9 @@ const styles = StyleSheet.create({
   },
   loginView: {
     marginTop: 50
+  },
+  icon: {
+    width: 24,
+    height: 24,
   }
 });
