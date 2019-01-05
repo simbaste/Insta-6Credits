@@ -36,7 +36,7 @@ export default class ListItem extends Component {
                     }}>
                     <Image 
                     style={{width: itemWidth-(margin*columns), height: 100}}
-                    source={this.props.image} />
+                    source={{uri: this.props.image}} />
                 </Animated.View>
             </TouchableWithoutFeedback>
           )

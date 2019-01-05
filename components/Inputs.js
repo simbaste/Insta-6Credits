@@ -2,34 +2,25 @@ import React, { Component } from 'react'
 import { 
     View, 
     Text,
-    ActivityIndicator,
     AsyncStorage,
-    Button,
-    StatusBar, 
     TouchableOpacity, 
     TextInput, 
     StyleSheet } from 'react-native'
 
 import * as firebase from 'firebase'
 
-import { 
-    createStackNavigator, 
-    createSwitchNavigator, 
-    createAppContainer } from 'react-navigation'
-import SettingsScreen from './SettingsScreen';
-import HomeScreen from './HomeScreen';
 import LoopAnimation from 'react-native-LoopAnimation';
 // import * as constants from '../constants';
 
 // Initialize Firebase
-var config = {
-    apiKey: "AIzaSyAEhi4ehf1tqIDFIn2SB0dTmhyY51Pjaqg",
-    authDomain: "insta6credit.firebaseapp.com",
-    databaseURL: "https://insta6credit.firebaseio.com",
-    projectId: "insta6credit",
-    storageBucket: "insta6credit.appspot.com",
-    messagingSenderId: "881293053273"
-  };
+// var config = {
+//     apiKey: "AIzaSyAEhi4ehf1tqIDFIn2SB0dTmhyY51Pjaqg",
+//     authDomain: "insta6credit.firebaseapp.com",
+//     databaseURL: "https://insta6credit.firebaseio.com",
+//     projectId: "insta6credit",
+//     storageBucket: "insta6credit.appspot.com",
+//     messagingSenderId: "881293053273"
+//   };
 
 function password_validate(password) {
     var mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{7,13})");
@@ -125,9 +116,6 @@ class Inputs extends Component {
             width: 700,
             height: 306
           }
-        if (!firebase.apps.length) {
-            firebase.initializeApp(config)
-        }
         return (
             <View style = {styles.container}>
                 <LoopAnimation 

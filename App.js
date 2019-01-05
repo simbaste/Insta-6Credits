@@ -11,7 +11,6 @@ import {
   TouchableOpacity, 
   TextInput, 
   SafeAreaView } from 'react-native';
-import LoopAnimation from 'react-native-LoopAnimation'
 
 import { createDrawerNavigator } from 'react-navigation'
 
