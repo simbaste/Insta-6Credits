@@ -8,6 +8,7 @@ import {
     Image,
     FlatList,
     Dimensions,
+    Alert,
     TouchableWithoutFeedback,
     Animated,
     StatusBar, 
@@ -21,10 +22,39 @@ import {
     createAppContainer } from 'react-navigation';
 
 import { Icon, Container, Header, Content, Left, Right } from 'native-base';
+import { ImagePicker, Permissions } from 'expo'
+import firebase from 'firebase'
 
 import ListItem from './ListItem'
+// import uploadImage from './API/UploadImage'
 
 const ITEM_WIDTH = Dimensions.get('window').width
+
+var images = [
+    require("../assets/images/image1.jpg"),
+    require("../assets/images/image2.jpg"),
+    require("../assets/images/image3.jpg"),
+    require("../assets/images/image4.jpg"),
+    require("../assets/images/image5.jpg"),
+    require("../assets/images/image6.jpg"),
+    require("../assets/images/image7.jpg"),
+    require("../assets/images/image8.jpg"),
+    require("../assets/images/image9.jpg"),
+    require("../assets/images/image10.jpg")
+]
+
+var myimages = [
+    "../assets/images/image1.jpg",
+    "../assets/images/image2.jpg",
+    "../assets/images/image3.jpg",
+    "../assets/images/image4.jpg",
+    "../assets/images/image5.jpg",
+    "../assets/images/image6.jpg",
+    "../assets/images/image7.jpg",
+    "../assets/images/image8.jpg",
+    "../assets/images/image9.jpg",
+    "../assets/images/image10.jpg"
+]
 
 class HomeScreen extends Component {
     static navigationOptions = {
@@ -39,7 +69,8 @@ class HomeScreen extends Component {
 
       state = {
           columns: 2,
-          margin: 5
+          margin: 5,
+          image: null
       }
     
       render() {
@@ -65,18 +96,7 @@ class HomeScreen extends Component {
                     <Button title="Actually, sign me out :)" onPress={this._signOutAsync} /> */}
                     <FlatList
                         numColumns={columns} 
-                        data={[
-                            require("../assets/images/image1.jpg"),
-                            require("../assets/images/image2.jpg"),
-                            require("../assets/images/image3.jpg"),
-                            require("../assets/images/image4.jpg"),
-                            require("../assets/images/image5.jpg"),
-                            require("../assets/images/image6.jpg"),
-                            require("../assets/images/image7.jpg"),
-                            require("../assets/images/image8.jpg"),
-                            require("../assets/images/image9.jpg"),
-                            require("../assets/images/image10.jpg")
-                        ]}
+                        data={images}
                         renderItem={({ item }) => {
                             return <ListItem 
                             itemWidth={ITEM_WIDTH/columns}
@@ -107,8 +127,66 @@ class HomeScreen extends Component {
       };
 
       _addPicture = () => {
-
+        Alert.alert(
+            'Choose photos source',
+            'Choose the source of your photos between the camera and the library',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'From Camera',
+                    onPress: this.addFromCamera
+                },
+                {
+                    text: 'From Library',
+                    onPress: this.addFromLibrary
+                }
+            ]
+        )
       }
+
+      addFromLibrary =  async () => {
+        await this.askPermissionAsync() 
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3]
+        })
+        console.log(result);
+        if (!result.cancelled) {
+            this.setState({image: result.uri })
+            this.uploadImage(result.uri)
+        }
+      }
+
+      addFromCamera = async () => {
+          await this.askPermissionAsync()
+          let result = await ImagePicker.launchCameraAsync({
+              allowsEditing: true,
+              aspect: [4, 3]
+          })
+          console.log(result);
+          if (!result.cancelled) {
+            // images.push(require(result.uri))
+            this.uploadImage(result.uri)
+            this.setState({image: result.uri })
+          }
+      }
+
+      askPermissionAsync = async () => {
+          await Permissions.askAsync(Permissions.CAMERA)
+          await Permissions.askAsync(Permissions.CAMERA_ROLL)
+      }
+
+    uploadImage = async(uri) => {
+        const response = await fetch(uri)
+        const blob = await response.blob()
+        
+        var ref = firebase.storage().ref().child(uri)
+        return ref.put(blob)
+    }
 }
 
 export default HomeScreen
